@@ -21,6 +21,11 @@ Route::get('/info', function () {
     return view('info');
 });
 
+// Route::get('/test/{name}/{age}', 'HobbyController@index');
+
+// Resource 7つのアクションのRoute自動生成
+Route::resource('hobby', 'HobbyController');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
