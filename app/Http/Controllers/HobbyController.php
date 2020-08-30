@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class HobbyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']); // ログインしてなければアクセス不可（indexとshow以外）
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +20,8 @@ class HobbyController extends Controller
     public function index()
     {
         // $hobbies = Hobby::all();
-        $hobbies = Hobby::paginate(10);
+        // $hobbies = Hobby::paginate(10);
+        $hobbies = Hobby::orderBy('created_at', 'DESC')->paginate(10);
 
         return view('hobby.index')->with([
             'hobbies' => $hobbies,
@@ -48,6 +54,7 @@ class HobbyController extends Controller
         $hobby = new Hobby([
             'name' => $request->name,
             'description' => $request->description,
+            'user_id' => auth()->id() // current_user_idを取得できる
         ]);
         $hobby->save();
         return $this->index()->with(
