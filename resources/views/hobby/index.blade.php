@@ -25,6 +25,10 @@
                             @endauth
                             <!-- diffForHumansはCarbonライブラリのメソッド -->
                             <span class="float-right mx-3">{{ $hobby->created_at->diffForHumans() }}</span>
+                            <br>
+                            @foreach($hobby->tags as $tag)
+                            <a href=""><span class="badge badge-{{ $tag->style }}">{{ $tag->name }}</span></a>
+                            @endforeach
                         </li>
                         @endforeach
                     </ul>
