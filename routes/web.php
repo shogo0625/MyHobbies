@@ -26,6 +26,7 @@ Route::get('/info', function () {
 // Resource 7つのアクションのRoute自動生成
 Route::resource('hobby', 'HobbyController');
 Route::resource('tag', 'TagController');
+Route::resource('user', 'UserController');
 
 Auth::routes();
 
