@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Hobby;
+use App\Tag;
 use Illuminate\Http\Request;
+// Tagのアタッチ・デタッチ時にhobbyTagコントローラから渡されるFlash Sessionを読み込むためにインポート
+use Illuminate\Support\Facades\Session;
 
 class HobbyController extends Controller
 {
@@ -72,8 +75,14 @@ class HobbyController extends Controller
      */
     public function show(Hobby $hobby)
     {
+        $allTags = Tag::all();
+        $usedTags = $hobby->tags;
+        $availableTags = $allTags->diff($usedTags); // diffで全てのタグから使用済のタグを引く
+
         return view('hobby.show')->with([
             'hobby' => $hobby,
+            'availableTags' => $availableTags,
+            'message_success' => Session::get('message_success') // HobbyTagコントローラから渡されるFlash Session
         ]);
     }
 
