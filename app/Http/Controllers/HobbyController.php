@@ -60,9 +60,14 @@ class HobbyController extends Controller
             'user_id' => auth()->id() // current_user_idを取得できる
         ]);
         $hobby->save();
-        return $this->index()->with(
+        // return $this->index()->with(
+        //     [
+        //         'message_success' => "The hobby <b>" . $hobby->name . "</b> was created."
+        //     ]
+        // );
+        return redirect('/hobby/' . $hobby->id)->with(
             [
-                'message_success' => "The hobby <b>" . $hobby->name . "</b> was created."
+                'message_warning' => "Please assign some tags now."
             ]
         );
     }
@@ -82,7 +87,8 @@ class HobbyController extends Controller
         return view('hobby.show')->with([
             'hobby' => $hobby,
             'availableTags' => $availableTags,
-            'message_success' => Session::get('message_success') // HobbyTagコントローラから渡されるFlash Session
+            'message_success' => Session::get('message_success'), // HobbyTagコントローラから渡されるFlash Session
+            'message_warning' => Session::get('message_warning') // storeメソッドから渡されるFlash Session
         ]);
     }
 
