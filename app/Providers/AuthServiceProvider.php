@@ -24,7 +24,9 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
+        // 第一：Gateの名前（制限を表す名前/自由） 第二：function（$user, $hobby）
+        Gate::define('connect_hobbyTag', function ($user, $hobby) {
+            return $user->id === $hobby->user_id || auth()->user()->role === 'admin';
+        });
     }
 }
