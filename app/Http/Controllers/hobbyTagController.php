@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Tag;
 use App\Hobby;
+use Illuminate\Support\Facades\Gate;
 
 class hobbyTagController extends Controller
 {
@@ -24,6 +25,12 @@ class hobbyTagController extends Controller
     public function attachTag($hobby_id, $tag_id)
     {
         $hobby = Hobby::find($hobby_id);
+
+        // AuthServiceProviderに定義したGate
+        if (Gate::denies('connect_hobbyTag', $hobby)) {
+            abort(403, "No, this hobby is not yours!");
+        }
+
         $tag = Tag::find($tag_id); // サクセスメッセージ内、名前表示に使用
         $hobby->tags()->attach($tag_id);
         return back()->with([
@@ -35,6 +42,12 @@ class hobbyTagController extends Controller
     {
         $hobby = Hobby::find($hobby_id);
         $tag = Tag::find($tag_id); // サクセスメッセージ内、名前表示に使用
+
+        // AuthServiceProviderに定義したGate
+        if (Gate::denies('connect_hobbyTag', $hobby)) {
+            abort(403, "No, this hobby is not yours!");
+        }
+
         $hobby->tags()->detach($tag_id);
         return back()->with([
             'message_success' => "The Tag <b>" . $tag->name . "</b> was removed."
